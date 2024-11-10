@@ -1,0 +1,55 @@
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Spring Boot
+**/spring.log
+
+# IntelliJ IDEA
+*.iml
+.idea/
+*.iws
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Logs
+*.log
+
+# Environment Files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Frontend (Node.js/React)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Parcel-bundled output
+.cache/
+dist/
+
+# Build output for React
+build/
+
+# Coverage files (if using Jest)
+coverage/
+
+# TypeScript cache
+*.tsbuildinfo
