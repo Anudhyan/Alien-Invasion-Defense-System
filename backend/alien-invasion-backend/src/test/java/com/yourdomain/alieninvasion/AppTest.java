@@ -3,7 +3,8 @@ package com.yourdomain.alieninvasion;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
+import com.vonage.client.VonageClient;
+import com.vonage.client.auth.ClientCredential;
 /**
  * Unit test for simple App.
  */

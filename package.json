@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@vonage/server-sdk": "^3.19.1",
+    "dotenv": "^16.4.5"
+  }
+}
