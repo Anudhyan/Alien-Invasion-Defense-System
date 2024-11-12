@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alien Invasion Defense System</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .container { max-width: 500px; margin: auto; }
+    h1 { color: #333; text-align: center; }
+    label { display: block; margin-top: 10px; }
+    input, button { width: 100%; padding: 10px; margin-top: 5px; }
+    button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #45a049; }
+    .message { margin-top: 20px; padding: 10px; color: #333; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Alien Invasion Defense System</h1>
+    <form id="reportForm">
+      <label for="location">Alien Sighting Location</label>
+      <input type="text" id="location" name="location" required placeholder="e.g., Central Park, NY">
+
+      <label for="details">Sighting Details</label>
+      <input type="text" id="details" name="details" required placeholder="e.g., Large UFO spotted">
+
+      <button type="submit">Report Sighting</button>
+    </form>
+    <div class="message" id="responseMessage"></div>
+  </div>
+
+  <script>
+    // Add a fake backend response simulation
+    function fakeBackendResponse(location, details) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ 
+            message: `Sighting reported at ${location} with details: "${details}". Report received successfully!`
+          });
+        }, 1000); // Simulate network delay
+      });
+    }
+
+    document.getElementById("reportForm").addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const location = document.getElementById("location").value;
+      const details = document.getElementById("details").value;
+
+      try {
+        // Use the fake backend response for testing
+        const result = await fakeBackendResponse(location, details);
+        document.getElementById("responseMessage").textContent = result.message;
+      } catch (error) {
+        document.getElementById("responseMessage").textContent = "Error reporting sighting. Please try again.";
+        console.error("Error:", error);
+      }
+    });
+  </script>
+</body>
+</html>
