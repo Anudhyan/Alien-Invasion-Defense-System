@@ -1,61 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alien Invasion Defense System</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .container { max-width: 500px; margin: auto; }
-    h1 { color: #333; text-align: center; }
-    label { display: block; margin-top: 10px; }
-    input, button { width: 100%; padding: 10px; margin-top: 5px; }
-    button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-    button:hover { background-color: #45a049; }
-    .message { margin-top: 20px; padding: 10px; color: #333; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alien Invasion Defense System - Vonage Enhanced</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 25px;
+            max-width: 500px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-top: 5px solid #5b3fff;
+            position: relative;
+        }
+        .vonage-header {
+            color: #5b3fff;
+            font-weight: bold;
+            font-size: 1.8em;
+        }
+        label, select, input, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+        }
+        .message {
+            padding: 10px;
+            margin-top: 10px;
+            display: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .message.success {
+            color: #28a745;
+            background-color: #d4edda;
+        }
+        .message.error {
+            color: #dc3545;
+            background-color: #f8d7da;
+        }
+        .vonage-logo {
+            width: 60px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Alien Invasion Defense System</h1>
-    <form id="reportForm">
-      <label for="location">Alien Sighting Location</label>
-      <input type="text" id="location" name="location" required placeholder="e.g., Central Park, NY">
+    <div class="container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Vonage_logo.png" alt="Vonage Logo" class="vonage-logo">
+        <h1 class="vonage-header">Alien Invasion Defense System</h1>
+        <p>Communicate alerts using Vonage APIs</p>
+        <form id="defenseForm">
+            <label for="alertLevel">Select Alert Level</label>
+            <select id="alertLevel" required>
+                <option value="" disabled selected>Select alert level</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
 
-      <label for="details">Sighting Details</label>
-      <input type="text" id="details" name="details" required placeholder="e.g., Large UFO spotted">
+            <label for="apiType">Vonage API Type</label>
+            <select id="apiType" required>
+                <option value="" disabled selected>Select API</option>
+                <option value="sms">SMS Alert</option>
+                <option value="voice">Voice Alert</option>
+                <option value="video">Video Alert</option>
+            </select>
 
-      <button type="submit">Report Sighting</button>
-    </form>
-    <div class="message" id="responseMessage"></div>
-  </div>
+            <input type="text" id="phoneNumber" placeholder="Enter phone number (+1234567890)" required pattern="\+?[0-9]{10,15}">
+            <textarea id="message" placeholder="Enter alert message" required></textarea>
 
-  <script>
-    // Add a fake backend response simulation
-    function fakeBackendResponse(location, details) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({ 
-            message: `Sighting reported at ${location} with details: "${details}". Report received successfully!`
-          });
-        }, 1000); // Simulate network delay
-      });
-    }
+            <button type="submit">Send Alert</button>
+        </form>
+        <div class="message" id="responseMessage"></div>
+    </div>
 
-    document.getElementById("reportForm").addEventListener("submit", async function (event) {
-      event.preventDefault();
-      const location = document.getElementById("location").value;
-      const details = document.getElementById("details").value;
+    <script>
+        document.getElementById('defenseForm').addEventListener('submit', function(event) {
+            event.preventDefault();
 
-      try {
-        // Use the fake backend response for testing
-        const result = await fakeBackendResponse(location, details);
-        document.getElementById("responseMessage").textContent = result.message;
-      } catch (error) {
-        document.getElementById("responseMessage").textContent = "Error reporting sighting. Please try again.";
-        console.error("Error:", error);
-      }
-    });
-  </script>
+            const alertLevel = document.getElementById('alertLevel').value;
+            const apiType = document.getElementById('apiType').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const message = document.getElementById('message').value;
+            const responseMessage = document.getElementById('responseMessage');
+
+            responseMessage.style.display = 'none';
+
+            if (!/^\+?[0-9]{10,15}$/.test(phoneNumber)) {
+                responseMessage.textContent = 'Invalid phone number format. Please enter a valid phone number.';
+                responseMessage.className = 'message error';
+                responseMessage.style.display = 'block';
+                return;
+            }
+
+            // Send the data to the backend
+            fetch('http://localhost:3000/send-alert', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    alertLevel,
+                    apiType,
+                    phoneNumber,
+                    message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                responseMessage.textContent = data.message;
+                responseMessage.className = `message ${data.success ? 'success' : 'error'}`;
+                responseMessage.style.display = 'block';
+            })
+            .catch(error => {
+                responseMessage.textContent = 'Error connecting to the server.';
+                responseMessage.className = 'message error';
+                responseMessage.style.display = 'block';
+            });
+        });
+    </script>
 </body>
 </html>
